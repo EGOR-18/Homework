@@ -16,10 +16,10 @@ users: list[Users] = []
 async def get_all_users():
     return users
 
-@app.post("/user/{username}/{age}", response_model=Users)
-async def add_user(username: Annotated[str,  Path(min_length=5, max_length=20, description='Enter username')],
+@app.post("/user/{username}/{age}")
+async def add_user( username: Annotated[str,  Path(min_length=5, max_length=20, description='Enter username')],
                    age:  Annotated[int, Path(ge=18, le=120, description='Enter age')]):
-    user_id = len(users) + 1
+    user_id = (users[-1].id + 1) if users else 1
     user = Users(username=username, age=age, id=user_id)
     users.append(user)
     return user
